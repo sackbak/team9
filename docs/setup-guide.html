@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VS Code + Git + GitHub Copilot 설치 가이드</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0d1117;
+            color: #e6edf3;
+            line-height: 1.7;
+            padding: 0;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #161b22 0%, #0d1117 50%, #161b22 100%);
+            border-bottom: 1px solid #30363d;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(90deg, #58a6ff, #79c0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.15em;
+            color: #8b949e;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        .step {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 28px;
+            position: relative;
+            transition: border-color 0.2s;
+        }
+
+        .step:hover {
+            border-color: #58a6ff;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -16px;
+            left: 24px;
+            background: #238636;
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9em;
+        }
+
+        .step h2 {
+            font-size: 1.4em;
+            color: #f0f6fc;
+            margin-bottom: 16px;
+            padding-left: 4px;
+        }
+
+        .step h2 .emoji {
+            margin-right: 8px;
+        }
+
+        .step p, .step li {
+            color: #c9d1d9;
+            font-size: 1em;
+        }
+
+        .step ul, .step ol {
+            padding-left: 24px;
+            margin: 12px 0;
+        }
+
+        .step li {
+            margin-bottom: 10px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1em;
+            margin: 8px 8px 8px 0;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+        }
+
+        .btn-vscode {
+            background: #0078d4;
+            color: #fff;
+        }
+
+        .btn-git {
+            background: #f05032;
+            color: #fff;
+        }
+
+        .code-block {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.95em;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block code {
+            color: #79c0ff;
+        }
+
+        .code-block .comment {
+            color: #8b949e;
+        }
+
+        .code-block .command {
+            color: #ff7b72;
+        }
+
+        .code-block .string {
+            color: #a5d6ff;
+        }
+
+        .highlight-box {
+            background: rgba(56, 139, 253, 0.1);
+            border: 1px solid rgba(56, 139, 253, 0.4);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 16px 0;
+        }
+
+        .highlight-box.warning {
+            background: rgba(210, 153, 34, 0.1);
+            border-color: rgba(210, 153, 34, 0.4);
+        }
+
+        .highlight-box.success {
+            background: rgba(35, 134, 54, 0.1);
+            border-color: rgba(35, 134, 54, 0.4);
+        }
+
+        .highlight-box strong {
+            color: #58a6ff;
+        }
+
+        .highlight-box.warning strong {
+            color: #d29922;
+        }
+
+        .highlight-box.success strong {
+            color: #3fb950;
+        }
+
+        .divider {
+            height: 1px;
+            background: #30363d;
+            margin: 20px 0;
+        }
+
+        .step-group-title {
+            text-align: center;
+            font-size: 0.85em;
+            color: #8b949e;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 48px 0 24px;
+            font-weight: 600;
+        }
+
+        .step-group-title span {
+            background: #0d1117;
+            padding: 0 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-group-title::before {
+            content: '';
+            display: block;
+            height: 1px;
+            background: #30363d;
+            margin-top: 10px;
+            position: relative;
+            top: 22px;
+        }
+
+        .screenshot-placeholder {
+            background: #0d1117;
+            border: 2px dashed #30363d;
+            border-radius: 8px;
+            padding: 24px;
+            text-align: center;
+            color: #8b949e;
+            margin: 16px 0;
+            font-size: 0.9em;
+        }
+
+        .checklist {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .checklist li {
+            padding: 8px 0 8px 32px;
+            position: relative;
+        }
+
+        .checklist li::before {
+            content: '✓';
+            position: absolute;
+            left: 4px;
+            color: #3fb950;
+            font-weight: bold;
+        }
+
+        .copy-hint {
+            display: inline-block;
+            background: #30363d;
+            color: #8b949e;
+            font-size: 0.75em;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .repo-url {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 12px 20px;
+            margin: 12px 0;
+            font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            font-size: 1em;
+            color: #58a6ff;
+            word-break: break-all;
+            user-select: all;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #484f58;
+            font-size: 0.85em;
+            border-top: 1px solid #21262d;
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 1.6em; }
+            .step { padding: 24px 18px; }
+            .download-btn { display: block; text-align: center; margin: 8px 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <h1>VS Code + Git + GitHub Copilot</h1>
+    <p>개발 환경 설정 가이드 - 설치부터 팀 프로젝트 참여까지</p>
+</div>
+
+<div class="container">
+
+    <!-- ==================== SECTION 1: 설치 ==================== -->
+    <div class="step-group-title"><span>PART 1 - 프로그램 설치</span></div>
+
+    <div class="step">
+        <div class="step-number">1</div>
+        <h2><span class="emoji">📦</span> VS Code 설치</h2>
+        <p>VS Code(Visual Studio Code)는 마이크로소프트에서 만든 무료 코드 에디터입니다.</p>
+
+        <div style="margin: 20px 0;">
+            <a href="https://code.visualstudio.com/" class="download-btn btn-vscode" target="_blank">VS Code 다운로드</a>
+        </div>
+
+        <ol>
+            <li>위 링크를 클릭하여 다운로드 페이지로 이동합니다.</li>
+            <li><strong>"Download for Windows"</strong> 버튼을 클릭합니다.</li>
+            <li>다운로드된 설치 파일(<code>VSCodeUserSetup-x64-*.exe</code>)을 실행합니다.</li>
+            <li>설치 과정에서 기본 설정 그대로 <strong>"다음"</strong>을 눌러 설치를 완료합니다.</li>
+        </ol>
+
+        <div class="highlight-box">
+            <strong>Tip:</strong> 설치 시 "PATH에 추가" 옵션이 체크되어 있는지 확인하세요. 터미널에서 <code>code</code> 명령어로 VS Code를 열 수 있게 됩니다.
+        </div>
+    </div>
+
+    <div class="step">
+        <div class="step-number">2</div>
+        <h2><span class="emoji">🔧</span> Git 설치</h2>
+        <p>Git은 소스 코드 버전 관리 도구입니다. 팀원들과 코드를 공유하려면 반드시 필요합니다.</p>
+
+        <div style="margin: 20px 0;">
+            <a href="https://git-scm.com/" class="download-btn btn-git" target="_blank">Git 다운로드</a>
+        </div>
+
+        <ol>
+            <li>위 링크를 클릭하여 다운로드 페이지로 이동합니다.</li>
+            <li><strong>"Download for Windows"</strong> 버튼을 클릭합니다.</li>
+            <li>다운로드된 설치 파일(<code>Git-*-64-bit.exe</code>)을 실행합니다.</li>
+            <li>설치 과정에서 기본 설정 그대로 <strong>"Next"</strong>를 눌러 설치를 완료합니다.</li>
+        </ol>
+
+        <div class="highlight-box warning">
+            <strong>주의:</strong> Git 설치 후 VS Code를 <strong>한 번 종료했다가 다시 실행</strong>해야 Git이 정상적으로 인식됩니다.
+        </div>
+    </div>
+
+    <!-- ==================== SECTION 2: Git 설정 ==================== -->
+    <div class="step-group-title"><span>PART 2 - Git 초기 설정 (필수!)</span></div>
+
+    <div class="step">
+        <div class="step-number">3</div>
+        <h2><span class="emoji">⚙️</span> Git 사용자 정보 설정</h2>
+        <p>Git을 처음 사용할 때 <strong>반드시</strong> 이름과 이메일을 설정해야 합니다. 이 정보가 없으면 <code>git push</code>를 할 수 없습니다.</p>
+
+        <p style="margin-top: 12px;"><strong>VS Code에서 터미널 여는 법:</strong></p>
+        <ol>
+            <li>VS Code 상단 메뉴에서 <strong>Terminal</strong> &rarr; <strong>New Terminal</strong> 클릭</li>
+            <li>또는 단축키 <kbd style="background:#30363d; padding:2px 8px; border-radius:4px; font-size:0.9em;">Ctrl + `</kbd> (백틱) 사용</li>
+        </ol>
+
+        <p style="margin-top: 16px;">열린 터미널에 아래 명령어를 <strong>한 줄씩</strong> 입력하고 Enter를 누르세요:</p>
+
+        <div class="code-block">
+            <code>
+                <span class="comment"># 이름 설정 (GitHub 사용자명 권장)</span><br>
+                <span class="command">git config</span> --global user.name <span class="string">"여기에본인이름"</span><br><br>
+                <span class="comment"># 이메일 설정 (GitHub 가입 이메일과 동일하게)</span><br>
+                <span class="command">git config</span> --global user.email <span class="string">"여기에본인이메일@example.com"</span>
+            </code>
+        </div>
+
+        <div class="highlight-box warning">
+            <strong>중요:</strong> 큰따옴표(" ") 안의 내용을 본인 정보로 바꿔주세요!<br>
+            예시: <code>git config --global user.name "HongGilDong"</code><br>
+            예시: <code>git config --global user.email "hong@gmail.com"</code>
+        </div>
+
+        <p style="margin-top: 16px;">설정이 잘 됐는지 확인하려면:</p>
+        <div class="code-block">
+            <code>
+                <span class="command">git config</span> --global user.name<br>
+                <span class="command">git config</span> --global user.email
+            </code>
+        </div>
+        <p>입력한 이름과 이메일이 출력되면 성공입니다.</p>
+    </div>
+
+    <!-- ==================== SECTION 3: 프로젝트 클론 ==================== -->
+    <div class="step-group-title"><span>PART 3 - 팀 프로젝트 가져오기</span></div>
+
+    <div class="step">
+        <div class="step-number">4</div>
+        <h2><span class="emoji">📂</span> 레포지토리 클론 (Clone)</h2>
+        <p>GitHub에 있는 팀 프로젝트를 내 컴퓨터로 복사(clone)합니다.</p>
+
+        <ol>
+            <li>VS Code를 실행합니다.</li>
+            <li>왼쪽 사이드바에서 <strong>"Clone Repository"</strong> 버튼을 클릭합니다.</li>
+            <li>상단에 나타나는 입력창에 아래 주소를 붙여넣습니다:</li>
+        </ol>
+
+        <div class="repo-url">https://github.com/AIBizTeam9/team9.git</div>
+
+        <ol start="4">
+            <li><strong>"Clone from URL"</strong> 항목을 클릭합니다.</li>
+            <li>폴더 선택 창이 뜨면, 프로젝트를 저장할 <strong>로컬 폴더 위치</strong>를 지정합니다.</li>
+            <li><strong>"Select as Repository Destination"</strong> 버튼을 클릭합니다.</li>
+            <li>클론이 완료되면 <strong>"Open"</strong>을 눌러 프로젝트를 엽니다.</li>
+        </ol>
+
+        <div class="highlight-box success">
+            <strong>성공!</strong> 왼쪽 Explorer에 프로젝트 파일들 (docs 폴더 등)이 보이면 정상적으로 완료된 것입니다.
+        </div>
+    </div>
+
+    <!-- ==================== SECTION 4: Copilot ==================== -->
+    <div class="step-group-title"><span>PART 4 - GitHub Copilot 설정</span></div>
+
+    <div class="step">
+        <div class="step-number">5</div>
+        <h2><span class="emoji">🤖</span> GitHub Copilot 활성화</h2>
+        <p>GitHub Copilot은 AI 기반 코드 자동 완성 도구입니다.</p>
+
+        <ol>
+            <li>VS Code 좌측 하단의 <strong>사람 아이콘</strong>을 클릭합니다.</li>
+            <li><strong>"Sign in to GitHub"</strong>을 선택하여 GitHub 계정으로 로그인합니다.</li>
+            <li>로그인 완료 후, VS Code의 Welcome 탭에서 <strong>"Use AI Features with Copilot for free"</strong> 항목을 선택합니다.</li>
+            <li>우측 하단의 <strong>"Use AI Features"</strong> 버튼을 클릭합니다.</li>
+        </ol>
+
+        <div class="highlight-box">
+            <strong>Copilot Pro ($10/월) 안내:</strong><br>
+            - 처음 가입 시 <strong>30일 무료 체험</strong>이 가능합니다.<br>
+            - 무료 체험 없이도 기본 Copilot Free 기능은 사용할 수 있습니다.<br>
+            - Pro 요금제는 빡세게 사용하면 3일 만에 토큰을 다 소진할 수 있습니다.<br>
+            - 토큰은 <strong>매월 1일에 리셋</strong>됩니다.
+        </div>
+    </div>
+
+    <!-- ==================== SECTION 5: 기본 Git 사용법 ==================== -->
+    <div class="step-group-title"><span>PART 5 - 기본 Git 사용법 (참고)</span></div>
+
+    <div class="step">
+        <div class="step-number">6</div>
+        <h2><span class="emoji">🚀</span> 코드 수정 후 Push 하기</h2>
+        <p>파일을 수정한 뒤 GitHub에 올리는 기본 흐름입니다.</p>
+
+        <div class="code-block">
+            <code>
+                <span class="comment"># 1. 변경된 파일 확인</span><br>
+                <span class="command">git status</span><br><br>
+                <span class="comment"># 2. 변경된 파일을 스테이징 (올릴 준비)</span><br>
+                <span class="command">git add</span> .<br><br>
+                <span class="comment"># 3. 커밋 (변경 내용 저장)</span><br>
+                <span class="command">git commit</span> -m <span class="string">"변경 내용 설명"</span><br><br>
+                <span class="comment"># 4. GitHub에 업로드</span><br>
+                <span class="command">git push</span>
+            </code>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Tip:</strong> VS Code 왼쪽의 <strong>Source Control</strong> 탭 (분기 아이콘)에서 GUI로도 동일한 작업을 할 수 있습니다.
+        </div>
+    </div>
+
+    <!-- ==================== 체크리스트 ==================== -->
+    <div class="step-group-title"><span>최종 체크리스트</span></div>
+
+    <div class="step">
+        <h2><span class="emoji">&#9745;</span> 모든 설정 완료 확인</h2>
+        <ul class="checklist">
+            <li>VS Code 설치 완료</li>
+            <li>Git 설치 완료</li>
+            <li><code>git config</code>로 이름/이메일 설정 완료</li>
+            <li>팀 프로젝트 레포지토리 Clone 완료</li>
+            <li>GitHub 계정 로그인 완료</li>
+            <li>GitHub Copilot 활성화 완료</li>
+        </ul>
+
+        <div class="highlight-box success">
+            <strong>축하합니다!</strong> 모든 설정이 완료되었습니다. 이제 팀 프로젝트에 참여할 수 있습니다.
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    AIBizTeam9 - 개발 환경 설정 가이드
+</footer>
+
+</body>
+</html>
