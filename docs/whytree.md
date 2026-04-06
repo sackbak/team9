@@ -9,5 +9,5 @@
 
 ### 석빈's Why Tree
 <p align="center">
-  <img src="seokbin.png" alt="dongkeun's Why Tree" width="800">
+  <img src="seokbin.PNG" alt="seokbin's Why Tree" width="800">
 </p>
