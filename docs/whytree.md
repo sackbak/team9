@@ -7,3 +7,7 @@
   <img src="dongkeun.png" alt="dongkeun's Why Tree" width="800">
 </p>
 
+### 석빈's Why Tree
+<p align="center">
+  <img src="seokbin.png" alt="dongkeun's Why Tree" width="800">
+</p>
